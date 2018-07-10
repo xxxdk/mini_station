@@ -12,8 +12,8 @@
 #define LED_PIN			12
 #define FLASH_TIME		300	//ms
 
-os_timer_t flashtimer;
-uint8 fflag=0;
+LOCAL os_timer_t flashtimer;
+LOCAL uint8 fflag=0;
 
 void ICACHE_FLASH_ATTR timer_flash_cb(void)
 {

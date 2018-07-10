@@ -15,7 +15,7 @@
 
 #define WAIT_TIME		2000
 
-os_timer_t intr_timer;
+LOCAL os_timer_t intr_timer;
 
 void ICACHE_FLASH_ATTR timer_intr_cb(void)
 {

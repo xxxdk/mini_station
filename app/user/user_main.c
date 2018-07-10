@@ -11,16 +11,21 @@
 #include "ets_sys.h"
 #include "osapi.h"
 #include "user_interface.h"
+
 #include "driver/uart.h"
-#include "user_config.h"
+#include "driver/i2c.h"
+#include "driver/get_sensor_data.h"
 
 void ICACHE_FLASH_ATTR all_init_cb();
 
 void ICACHE_FLASH_ATTR all_init_cb()		          //初始化回调函数
 {
 	os_printf("SDK version:%s\n", system_get_sdk_version());
-	os_printf("MS version: 0.1.2\n");
+	os_printf("MS version: 0.2.2\n");
+	i2c_init();
     key_timer_init();
+    os_delay_us(500);
+    sensor_start();
 }
 
 uint32 ICACHE_FLASH_ATTR
