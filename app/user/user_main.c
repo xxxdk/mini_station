@@ -14,27 +14,13 @@
 #include "driver/uart.h"
 #include "user_config.h"
 
-#define SSID        "k"						 //wifi的SSID
-#define PASSWORD    "123456qw"				 //wifi的password
-
 void ICACHE_FLASH_ATTR all_init_cb();
-void ICACHE_FLASH_ATTR user_set_station_config();
 
 void ICACHE_FLASH_ATTR all_init_cb()		          //初始化回调函数
 {
 	os_printf("SDK version:%s\n", system_get_sdk_version());
-    //user_set_station_config();
+	os_printf("MS version: 0.1.2\n");
     key_timer_init();
-}
-
-void ICACHE_FLASH_ATTR user_set_station_config()      //连接的wifi参数的设置函数
-{
-    struct station_config stationConf;
-    stationConf.bssid_set = 0;
-    os_memcpy(&stationConf.ssid, SSID, 32);
-    os_memcpy(&stationConf.password, PASSWORD, 64);
-    wifi_station_set_config(&stationConf);				//设置参数函数
-    wifi_station_connect();								//连接AP
 }
 
 uint32 ICACHE_FLASH_ATTR

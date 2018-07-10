@@ -13,19 +13,20 @@
 #define FLASH_TIME		300	//ms
 
 os_timer_t flashtimer;
-uint8 a=0;
+uint8 fflag=0;
 
 void ICACHE_FLASH_ATTR timer_flash_cb(void)
 {
-	if(a==0)
+
+	if(fflag==0)
 	{
 		GPIO_OUTPUT_SET(GPIO_ID_PIN(LED_PIN),1);
-		a = 1;
+		fflag = 1;
 	}
 	else
 	{
 		GPIO_OUTPUT_SET(GPIO_ID_PIN(LED_PIN),0);
-		a = 0;
+		fflag = 0;
 	}
 }
 

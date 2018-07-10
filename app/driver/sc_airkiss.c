@@ -32,7 +32,7 @@ const airkiss_config_t akconf =
 
 void ICACHE_FLASH_ATTR stop_smartconfig()		//停止函数
 {
-	led_dis_flash();
+	led_stop_flash();
 	os_timer_disarm(&smcfg_stop_timer);
 	smartconfig_stop();
 	os_timer_disarm(&ssdp_time_serv);		//关闭定时器
@@ -171,14 +171,14 @@ smartconfig_done(sc_status status, void *pdata)		//smartconfig状态事件处理函数
 	        }
 	        smartconfig_stop();
 	        os_printf("smartconfig_stop\n");
-	        led_dis_flash();
+	        led_stop_flash();
 	        break;
 	    }
 }
 
 void ICACHE_FLASH_ATTR sc_airkiss_init()			//smartconfig初始化函数
 {
-	led_flash();				//LED闪烁
+	led_start_flash();				//LED闪烁
 	smartconfig_set_type(SC_TYPE_ESPTOUCH_AIRKISS); //设置类型，SC_TYPE_ESPTOUCH,SC_TYPE_AIRKISS,SC_TYPE_ESPTOUCH_AIRKISS
     wifi_set_opmode(STATION_MODE);
     smartconfig_start(smartconfig_done);		//开始smartconfig
