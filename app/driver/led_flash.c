@@ -38,14 +38,14 @@ void ICACHE_FLASH_ATTR led_init()
 	GPIO_OUTPUT_SET(GPIO_ID_PIN(15),0);
 }
 
-void ICACHE_FLASH_ATTR led_flash()
+void ICACHE_FLASH_ATTR led_start_flash()
 {
 	os_timer_disarm(&flashtimer);
 	os_timer_setfn(&flashtimer,(os_timer_func_t *)timer_flash_cb,NULL);
 	os_timer_arm(&flashtimer,FLASH_TIME,1);
 }
 
-void ICACHE_FLASH_ATTR led_dis_flash()
+void ICACHE_FLASH_ATTR led_stop_flash()
 {
 	os_timer_disarm(&flashtimer);
 	led_close();
