@@ -18,22 +18,27 @@
 #include "driver/mymqtt.h"
 #include "driver/wifi_link.h"
 
-
-LOCAL os_timer_t check_connect_timer,sntp_timer;
+LOCAL os_timer_t check_connect_timer;
 static uint8 count;
 
-void ICACHE_FLASH_ATTR sntp_cb()
-{
-    unsigned long ts = 0;
-    ts = sntp_get_current_timestamp();
-    INFO("current time : %s\n", sntp_get_real_time(ts));
-    if (ts == 0) {
-    	INFO("did not get a valid time from sntp server\n");
-    } else {
-		os_timer_disarm(&sntp_timer);
-		mqttInit();
-    }
-}
+//void ICACHE_FLASH_ATTR getTimeStamp()
+//{
+//	Unix_timestamp = sntp_get_current_timestamp() - 28800;
+//	INFO("current time : %lu, %s\r\n", Unix_timestamp, sntp_get_real_time(Unix_timestamp));
+//}
+
+//void ICACHE_FLASH_ATTR sntp_cb()
+//{
+//	Unix_timestamp = sntp_get_current_timestamp() - 28800;
+//		INFO("current time : %lu, %s\r\n", Unix_timestamp, sntp_get_real_time(Unix_timestamp));
+//	getTimeStamp();
+//    if (Unix_timestamp == 0) {
+//    	INFO("did not get a valid time from sntp server\n");
+//    } else {
+//		os_timer_disarm(&sntp_timer);
+////		mqttInit();
+//    }
+//}
 
 void ICACHE_FLASH_ATTR check_connect_cb()	//连接检测回调函数
 {
@@ -47,12 +52,17 @@ void ICACHE_FLASH_ATTR check_connect_cb()	//连接检测回调函数
     if(status == STATION_GOT_IP){				//判断是否获得IP
         INFO("wifi connect success!\r\n");
         os_timer_disarm(&check_connect_timer);
-        if(wifi_get_ip_info(STATION_IF, &ipconfig)){	//获取IP
+        if(0 != wifi_get_ip_info(STATION_IF, &ipconfig)){	//获取IP
         	INFO("----------------\r\n");
-        	sntp_setservername(0, "0.cn.pool.ntp.org");        // set sntp server after got ip address
-            sntp_setservername(0, "1.cn.pool.ntp.org");
-            sntp_init();
-            os_timer_arm(&sntp_timer,5000,1);
+        	sntp_stop();
+        	if( true == sntp_set_timezone(8) ) {
+            	sntp_setservername(0, "ntp1.aliyun.com");        // set sntp server after got ip address
+                sntp_setservername(1, "ntp2.aliyun.com");
+                sntp_setservername(2, "ntp3.aliyun.com");
+                sntp_init();
+        	}
+        	mqttInit();
+//            os_timer_arm(&sntp_timer,5000,1);
         }
     }else{
         count++;
@@ -77,8 +87,8 @@ void ICACHE_FLASH_ATTR user_set_station_config()      //连接的wifi参数的设置函数
 
     os_timer_disarm(&check_connect_timer);
 	os_timer_setfn(&check_connect_timer,(os_timer_func_t *)check_connect_cb,NULL);
-	os_timer_disarm(&sntp_timer);
-	os_timer_setfn(&sntp_timer,(os_timer_func_t *)sntp_cb,NULL);
+//	os_timer_disarm(&sntp_timer);
+//	os_timer_setfn(&sntp_timer,(os_timer_func_t *)sntp_cb,NULL);
 
 	os_timer_arm(&check_connect_timer,5000,1);
 }

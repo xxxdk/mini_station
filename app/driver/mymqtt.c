@@ -8,6 +8,8 @@
 #include "mqtt/debug.h"
 #include "mqtt_config.h"
 #include "driver/mymqtt.h"
+#include "driver/led_flash.h"
+#include "driver/get_sensor_data.h"
 
 MQTT_Client mqttClient;
 MQTT_Client* client = NULL;
@@ -31,15 +33,16 @@ void ICACHE_FLASH_ATTR mqttPublish(mqtt_topic_sms* mts)
 
 void ICACHE_FLASH_ATTR mqttConnect()
 {
-	struct ip_info ipconfig;
-	wifi_get_ip_info(STATION_IF, &ipconfig);
-	if(wifi_station_get_connect_status() == STATION_GOT_IP && ipconfig.ip.addr != 0)
-	{
+	led_stop_flash();
+//	struct ip_info ipconfig;
+//	wifi_get_ip_info(STATION_IF, &ipconfig);
+//	if(wifi_station_get_connect_status() == STATION_GOT_IP && ipconfig.ip.addr != 0)
+//	{
 		MQTT_Connect(&mqttClient);
 		INFO("mqttConnect\n\n");
-	}else{
-		wifi_station_connect();
-	}
+//	}else{
+//		wifi_station_connect();
+//	}
 }
 
 void ICACHE_FLASH_ATTR mqttReConnect()
@@ -50,6 +53,7 @@ void ICACHE_FLASH_ATTR mqttReConnect()
 void ICACHE_FLASH_ATTR mqttDisConnect()
 {
 	MQTT_Disconnect(&mqttClient);
+	led_start_flash();
 	INFO("mqttDisConnect\n\n");
 }
 
@@ -57,8 +61,8 @@ void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args)
 {
 	os_timer_disarm(&mqttimer);
 	client = (MQTT_Client*)args;
-	
-	MQTT_Subscribe(client, "dev", 0);			//client,topic,qos
+	sensorStart();
+//	MQTT_Subscribe(client, "dev", 0);			//client,topic,qos
 	INFO("MQTT: Connected\r\n");
 }
 
