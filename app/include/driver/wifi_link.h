@@ -11,5 +11,6 @@
 #include "os_type.h"
 
 void ICACHE_FLASH_ATTR user_set_station_config();
+void ICACHE_FLASH_ATTR check_timer_close();
 
 #endif

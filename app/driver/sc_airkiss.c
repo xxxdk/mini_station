@@ -6,9 +6,12 @@
 #include "user_interface.h"
 #include "smartconfig.h"
 #include "airkiss.h"
-#include "driver/sc_airkiss.h"
+
 #include "driver/sc_airkiss.h"
 #include "driver/led_flash.h"
+#include "driver/get_sensor_data.h"
+#include "driver/mymqtt.h"
+#include "driver/wifi_link.h"
 
 #define DEVICE_TYPE 		"gh_9e2cff3dfa51" 	//wechat public number
 #define DEVICE_ID 			"122475" 			//model ID
@@ -32,7 +35,7 @@ const airkiss_config_t akconf =
 
 void ICACHE_FLASH_ATTR stop_smartconfig()		//停止函数
 {
-	led_stop_flash();
+	scled_stop_flash();
 	os_timer_disarm(&smcfg_stop_timer);
 	smartconfig_stop();
 	os_timer_disarm(&ssdp_time_serv);		//关闭定时器
@@ -171,18 +174,23 @@ smartconfig_done(sc_status status, void *pdata)		//smartconfig状态事件处理函数
 	        }
 	        smartconfig_stop();
 	        os_printf("smartconfig_stop\n");
-	        led_stop_flash();
+	        scled_stop_flash();
 	        break;
 	    }
 }
 
 void ICACHE_FLASH_ATTR sc_airkiss_init()			//smartconfig初始化函数
 {
-	led_start_flash();				//LED闪烁
+	led_stop_flash();
+	scled_start_flash();				//LED闪烁
 	smartconfig_set_type(SC_TYPE_ESPTOUCH_AIRKISS); //设置类型，SC_TYPE_ESPTOUCH,SC_TYPE_AIRKISS,SC_TYPE_ESPTOUCH_AIRKISS
     wifi_set_opmode(STATION_MODE);
     smartconfig_start(smartconfig_done);		//开始smartconfig
     os_timer_disarm(&smcfg_stop_timer);			//启动停止smartconfig函数
     os_timer_setfn(&smcfg_stop_timer,(os_timer_func_t *)stop_smartconfig,NULL);
     os_timer_arm(&smcfg_stop_timer,95000,0);		//9.5秒
+
+    check_timer_close();
+    mqtt_timer_close();
+    sensorStop();
 }

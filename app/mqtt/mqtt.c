@@ -41,8 +41,10 @@
 #include "mqtt/mqtt.h"
 #include "mqtt/queue.h"
 
+#include "driver/led_flash.h"
 
-#define MQTT_TASK_PRIO                2
+
+#define MQTT_TASK_PRIO				2
 #define MQTT_TASK_QUEUE_SIZE        1
 #define MQTT_SEND_TIMOUT            5
 
@@ -458,6 +460,8 @@ mqtt_tcpclient_discon_cb(void *arg)
 void ICACHE_FLASH_ATTR
 mqtt_tcpclient_connect_cb(void *arg)
 {
+	led_stop_flash();
+
     struct espconn *pCon = (struct espconn *)arg;
     MQTT_Client* client = (MQTT_Client *)pCon->reverse;
 
@@ -498,6 +502,7 @@ mqtt_tcpclient_connect_cb(void *arg)
 void ICACHE_FLASH_ATTR
 mqtt_tcpclient_recon_cb(void *arg, sint8 errType)
 {
+	led_start_flash();
     struct espconn *pCon = (struct espconn *)arg;
     MQTT_Client* client = (MQTT_Client *)pCon->reverse;
 
@@ -828,6 +833,7 @@ MQTT_Connect(MQTT_Client *mqttClient)
 
     INFO("your ESP SSL/TLS configuration is %d.[0:NO_TLS\t1:TLS_WITHOUT_AUTHENTICATION\t2ONE_WAY_ANTHENTICATION\t3TWO_WAY_ANTHENTICATION]\n",DEFAULT_SECURITY);
     if (UTILS_StrToIP(mqttClient->host, &mqttClient->pCon->proto.tcp->remote_ip)) {
+
         INFO("TCP: Connect to ip  %s:%d\r\n", mqttClient->host, mqttClient->port);
         if (mqttClient->security)
         {

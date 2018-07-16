@@ -23,7 +23,7 @@
 void ICACHE_FLASH_ATTR all_init_cb()		          //初始化回调函数
 {
 	os_printf("SDK version:%s\n", system_get_sdk_version());
-	os_printf("MS version: 0.3.8\n");
+	os_printf("MS version: 0.3.8.3\n");
 
 	i2c_init();
 	key_timer_init();

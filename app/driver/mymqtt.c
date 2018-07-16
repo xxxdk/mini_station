@@ -33,13 +33,12 @@ void ICACHE_FLASH_ATTR mqttPublish(mqtt_topic_sms* mts)
 
 void ICACHE_FLASH_ATTR mqttConnect()
 {
-	led_stop_flash();
 //	struct ip_info ipconfig;
 //	wifi_get_ip_info(STATION_IF, &ipconfig);
 //	if(wifi_station_get_connect_status() == STATION_GOT_IP && ipconfig.ip.addr != 0)
 //	{
 		MQTT_Connect(&mqttClient);
-		INFO("mqttConnect\n\n");
+		INFO("mqttConnect\r\n");
 //	}else{
 //		wifi_station_connect();
 //	}
@@ -47,19 +46,19 @@ void ICACHE_FLASH_ATTR mqttConnect()
 
 void ICACHE_FLASH_ATTR mqttReConnect()
 {
-	INFO("mqttReConnect\n\n");
+	INFO("mqttReConnect\r\n");
 }
 
 void ICACHE_FLASH_ATTR mqttDisConnect()
 {
 	MQTT_Disconnect(&mqttClient);
-	led_start_flash();
-	INFO("mqttDisConnect\n\n");
+	INFO("mqttDisConnect\r\n");
 }
 
 void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args)
 {
 	os_timer_disarm(&mqttimer);
+//	led_stop_flash();
 	client = (MQTT_Client*)args;
 	sensorStart();
 //	MQTT_Subscribe(client, "dev", 0);			//client,topic,qos
@@ -69,6 +68,7 @@ void ICACHE_FLASH_ATTR mqttConnectedCb(uint32_t *args)
 void ICACHE_FLASH_ATTR mqttDisconnectedCb(uint32_t *args)
 {
 	client = (MQTT_Client*)args;
+//	led_start_flash();
 	INFO("MQTT: Disconnected\r\n");
 }
 
@@ -112,4 +112,10 @@ void ICACHE_FLASH_ATTR mqttInit()
 	MQTT_OnData(&mqttClient, mqttDataCb);
 
 	os_timer_arm(&mqttimer,3000,1);
+}
+
+void ICACHE_FLASH_ATTR mqtt_timer_close()
+{
+	os_timer_disarm(&mqttimer);
+	MQTT_Disconnect(&mqttClient);
 }

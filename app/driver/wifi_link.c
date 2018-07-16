@@ -17,6 +17,7 @@
 #include "mqtt/debug.h"
 #include "driver/mymqtt.h"
 #include "driver/wifi_link.h"
+#include "driver/led_flash.h"
 
 LOCAL os_timer_t check_connect_timer;
 static uint8 count;
@@ -39,6 +40,10 @@ static uint8 count;
 ////		mqttInit();
 //    }
 //}
+void ICACHE_FLASH_ATTR check_timer_close()
+{
+	os_timer_disarm(&check_connect_timer);
+}
 
 void ICACHE_FLASH_ATTR check_connect_cb()	//连接检测回调函数
 {
@@ -62,6 +67,7 @@ void ICACHE_FLASH_ATTR check_connect_cb()	//连接检测回调函数
                 sntp_init();
         	}
         	mqttInit();
+        	led_stop_flash();
 //            os_timer_arm(&sntp_timer,5000,1);
         }
     }else{
@@ -77,7 +83,7 @@ void ICACHE_FLASH_ATTR check_connect_cb()	//连接检测回调函数
 void ICACHE_FLASH_ATTR user_set_station_config()      //连接的wifi参数的设置函数
 {
 	INFO("user_set_station_config\r\n");
-
+	led_start_flash();
 //    struct station_config stationConf;
 //    stationConf.bssid_set = 0;
 //    os_memcpy(&stationConf.ssid, STA_SSID, 32);
