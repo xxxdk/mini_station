@@ -78,11 +78,11 @@ void ICACHE_FLASH_ATTR user_set_station_config()      //连接的wifi参数的设置函数
 {
 	INFO("user_set_station_config\r\n");
 
-    struct station_config stationConf;
-    stationConf.bssid_set = 0;
-    os_memcpy(&stationConf.ssid, STA_SSID, 32);
-    os_memcpy(&stationConf.password, STA_PASS, 64);
-    wifi_station_set_config(&stationConf);				//设置参数函数
+//    struct station_config stationConf;
+//    stationConf.bssid_set = 0;
+//    os_memcpy(&stationConf.ssid, STA_SSID, 32);
+//    os_memcpy(&stationConf.password, STA_PASS, 64);
+//    wifi_station_set_config(&stationConf);				//设置参数函数
     wifi_station_connect();								//连接AP
 
     os_timer_disarm(&check_connect_timer);
