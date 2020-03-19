@@ -13,13 +13,13 @@ typedef enum{
 
 /*DEFAULT CONFIGURATIONS*/
 
-#define MQTT_HOST				"sni.mqtt.iot.gz.baidubce.com" // the IP address or domain name of your MQTT server or MQTT broker ,such as "mqtt.yourdomain.com"
+#define MQTT_HOST				"***.mqtt.iot.gz.baidubce.com" // the IP address or domain name of your MQTT server or MQTT broker ,such as "mqtt.yourdomain.com"
 #define MQTT_PORT				1883    // the listening port of your MQTT server or MQTT broker
 #define MQTT_CLIENT_ID			"dev"    // the ID of yourself, any string is OK,client would use this ID register itself to MQTT server
-#define MQTT_USER				"sni/dev" // your MQTT login name, if MQTT server allow anonymous login,any string is OK, otherwise, please input valid login name which you had registered
-#define MQTT_PASS				"XXflnvr14kU7Ywj6qbFx+btUzjkaYQTg/hey46XlTO4=" // you MQTT login password, same as above
-#define STA_SSID				"k"//"IDART_M204_2.4G"    // your AP/router SSID to config your device networking
-#define STA_PASS				"12345678qw"//"mima111111" // your AP/router password
+#define MQTT_USER				"***/dev" // your MQTT login name, if MQTT server allow anonymous login,any string is OK, otherwise, please input valid login name which you had registered
+#define MQTT_PASS				"***" // you MQTT login password, same as above
+#define STA_SSID				"****"//    // your AP/router SSID to config your device networking
+#define STA_PASS				"****"// // your AP/router password
 
 #define DEFAULT_SECURITY    		NO_TLS      // very important: you must config DEFAULT_SECURITY for SSL/TLS
 
